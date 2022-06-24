@@ -6,6 +6,16 @@ module.exports = {
     path: path.resolve(__dirname, 'public'),
     filename: 'bundle.js',
   },
-  devtool: 'source-map'
+  devtool: 'source-map',
+  devServer: {
+    hot: false
+  },
+  module: {
+    rules: [
+      {
+        test: /\.js$/,
+        use: ['babel-loader']
+      }
+    ]
+  }
 };
-
