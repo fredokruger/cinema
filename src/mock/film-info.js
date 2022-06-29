@@ -117,6 +117,14 @@ const country = [
   'India'
 ];
 
+const releaseDates = [
+  '2017-05-07T00:00:00.000Z',
+  '2018-08-12T00:00:00.000Z',
+  '2019-10-11T00:00:00.000Z',
+  '2020-12-30T00:00:00.000Z',
+  '2021-03-03T00:00:00.000Z'
+];
+
 const descriptionsList = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras aliquet varius magna, non porta ligula feugiat eget. Fusce tristique felis at fermentum pharetra. Aliquam id orci ut lectus varius viverra. Nullam nunc ex, convallis sed finibus eget, sollicitudin eget ante. Phasellus eros mauris, condimentum sed nibh vitae, sodales efficitur ipsum. Sed blandit, eros vel aliquam faucibus, purus ex euismod diam, eu luctus nunc ante ut dui. Sed sed nisi sed augue convallis suscipit in sed felis. Aliquam erat volutpat. Nunc fermentum tortor ac porta dapibus. In rutrum ac purus sit amet tempus.'
   .split(/\.\s/);
 
@@ -130,6 +138,12 @@ const getRandomGenresList = () => Array.from({length: chooseRandomNumber(MIN_LEN
 
 const getRandomCommentsListForRandomFilm = () => Array.from({ length: chooseRandomNumber(MIN_LENGTH_COMMENTS_LIST, MAX_LENGTH_COMMENTS_LIST)}, () => comments[chooseRandomNumber(0, comments.length - 1)]);
 
+const getRandomReleaseDate = (dates) => {
+  const date = dates[chooseRandomNumber(0, dates.length - 1)];
+  const formattedDate = new Date(date);
+  return `${formattedDate.getDate()} ${formattedDate.toLocaleString('en-EN', { month: 'long' })} ${formattedDate.getFullYear()}`;
+};
+
 const createFilmsData = () => Array.from({length: chooseRandomNumber(MIN_LENGTH_DATA_FILMS, MAX_LENGTH_DATA_FILMS)}, (_, index) => ( {
   id: index,
   img: `./images/posters/${pathForPicture[chooseRandomNumber(0, pathForPicture.length - 1)]}`,
@@ -140,7 +154,7 @@ const createFilmsData = () => Array.from({length: chooseRandomNumber(MIN_LENGTH_
   screenwritters: getRandomScreenWrittersList(),
   actors: getRandomActorsList(),
   releaseYear: chooseRandomNumber(1920, 1980),
-  releaseFullFormat: 'D MMMM YY',
+  releaseFullFormat: getRandomReleaseDate(releaseDates),
   duration: duration[chooseRandomNumber(0, duration.length - 1)],
   country: country[chooseRandomNumber(0, country.length - 1)],
   genre: getRandomGenresList(),

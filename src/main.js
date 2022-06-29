@@ -1,3 +1,4 @@
+import { filmData } from './mock/film-info.js';
 import {RenderPosition, renderElement} from './render.js';
 // import createPopupOverlay from './view/overlay-popup.js';
 import {createHeaderProfileTemplate} from './view/header-profile.js';
@@ -12,7 +13,6 @@ import {createCardsContainer} from './view/cards-container.js';
 import {createFilmCardTemplate} from './view/film-card.js';
 // import createFilmsCount  from './view/films-count.js';
 // import createFilmDetails from './view/film-details.js';
-
 // const body = document.body;
 const header = document.querySelector('.header');
 //Шапка хэдера с профилем
