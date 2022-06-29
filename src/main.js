@@ -12,7 +12,7 @@ import {createExtraMostCommentedList} from './view/extra-most-commented-list.js'
 import {createCardsContainer} from './view/cards-container.js';
 import {createFilmCardTemplate} from './view/film-card.js';
 import {createFilmsCount}  from './view/films-count.js';
-// import createFilmDetails from './view/film-details.js';
+// import {createFilmDetails} from './view/film-details.js';
 // const body = document.body;
 const header = document.querySelector('.header');
 //Шапка хэдера с профилем
