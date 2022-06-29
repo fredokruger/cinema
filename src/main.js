@@ -33,10 +33,10 @@ const filmsContainer = document.querySelector('.films');
 const filmsListContainerComponent = createFilmsList();
 renderElement(filmsContainer, filmsListContainerComponent, RenderPosition.BEFOREEND);
 const filmsListContainer = document.querySelector('.films-list');
-// //Секция с топрэйтед фильмами
+//Секция с топрэйтед фильмами
 const topRatedFilmsListContainerComponent = createExtraTopRated();
 renderElement(filmsContainer, topRatedFilmsListContainerComponent, RenderPosition.BEFOREEND);
-// // //Секция с мосткомментед фильмами
+//Секция с мосткомментед фильмами
 const mostCommentedFilmsListContainerComponent = createExtraMostCommentedList();
 renderElement(filmsContainer, mostCommentedFilmsListContainerComponent, RenderPosition.BEFOREEND);
 
@@ -44,14 +44,7 @@ renderElement(filmsContainer, mostCommentedFilmsListContainerComponent, RenderPo
 const cardsContainerComponent = createCardsContainer();
 renderElement(filmsListContainer, cardsContainerComponent, RenderPosition.BEFOREEND);
 const cardsContainer = document.querySelector('.films-list__container');
-//5 карточек
-const filmCardComponent = createFilmCardTemplate();
-for (let i=0; i<5; i++) {
-  renderElement(cardsContainer, filmCardComponent, RenderPosition.BEFOREEND);
-}
-//Кнопка показать больше
-const showMoreButton = createShowMoreButton();
-renderElement(filmsListContainer, showMoreButton, RenderPosition.BEFOREEND);
+
 // Контейнер с топрэйтед карточками
 // const topRatedCardsContainerComponent = new CardsListContainerView();
 // renderElement(topRatedFilmsListContainerComponent.element, topRatedCardsContainerComponent.element, RenderPosition.BEFOREEND);
@@ -59,22 +52,31 @@ renderElement(filmsListContainer, showMoreButton, RenderPosition.BEFOREEND);
 // const mostCommentedCardsContainerComponent = new CardsListContainerView();
 // renderElement(mostCommentedFilmsListContainerComponent.element, mostCommentedCardsContainerComponent.element, RenderPosition.BEFOREEND);
 
+//Кнопка показать больше
+const showMoreButtonComponent = createShowMoreButton();
+renderElement(filmsListContainer, showMoreButtonComponent, RenderPosition.BEFOREEND);
+const showMoreButton = document.querySelector('.films-list__show-more');
 
-// //функция отрисовки следующих пяти фильмов
-// const createLoaderFunction = (array) => {
-//   let currentFilmsCount = ITEMS_COUNT;
-//   const onLoaderFilmsClick = () => {
-//     const nextSliceFilms = array.slice(currentFilmsCount, currentFilmsCount + ITEMS_COUNT);
-//     nextSliceFilms.forEach((item) => renderElement(cardsContainerComponent.element, new FilmCardView(item).element, RenderPosition.BEFOREEND));
-//     currentFilmsCount += ITEMS_COUNT;
-//     if (currentFilmsCount >= array.length) {
-//       showMoreButton.removeElement();
-//     }
-//   };
-//   showMoreButton.element.addEventListener('click', onLoaderFilmsClick);
-// };
+//5 карточек фильмов
+const ITEMS_COUNT = 5;
+const sliceFilms = filmData.slice(0, ITEMS_COUNT);
+sliceFilms.forEach((item) => renderElement(cardsContainer, createFilmCardTemplate(item), RenderPosition.BEFOREEND));
 
-// createLoaderFunction(filmData);
+//функция отрисовки следующих пяти фильмов
+const createLoaderFunction = (array) => {
+  let currentFilmsCount = ITEMS_COUNT;
+  const onLoaderFilmsClick = () => {
+    const nextSliceFilms = array.slice(currentFilmsCount, currentFilmsCount + ITEMS_COUNT);
+    nextSliceFilms.forEach((item) => renderElement(cardsContainer, createFilmCardTemplate(item), RenderPosition.BEFOREEND));
+    currentFilmsCount += ITEMS_COUNT;
+    if (currentFilmsCount >= array.length) {
+      showMoreButton.remove();
+    }
+  };
+  showMoreButton.addEventListener('click', onLoaderFilmsClick);
+};
+
+createLoaderFunction(filmData);
 
 // //Статистика в футере
 // const filmsCountContainer = document.querySelector('.footer__statistics');

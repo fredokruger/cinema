@@ -1,3 +1,4 @@
+const MAX_LENGTH_DESCRIPTION_STRING_TO_FILM_CARD = 140;
 //Функция получения рандомного числа из дипазона
 const chooseRandomNumber = (min, max, fixed) => {
   if (fixed) {
@@ -7,4 +8,5 @@ const chooseRandomNumber = (min, max, fixed) => {
   return Math.floor(Math.random() * (max + 1 - min) + min);
 };
 
-export {chooseRandomNumber};
+const getConvertedString = (string, specifiedLength) => string.length > specifiedLength ? `${string.slice(0, specifiedLength - 1)}...` : string;
+export {chooseRandomNumber, getConvertedString, MAX_LENGTH_DESCRIPTION_STRING_TO_FILM_CARD};
