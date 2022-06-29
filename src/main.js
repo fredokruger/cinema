@@ -11,7 +11,7 @@ import {createExtraTopRated} from './view/extra-top-rated-list.js';
 import {createExtraMostCommentedList} from './view/extra-most-commented-list.js';
 import {createCardsContainer} from './view/cards-container.js';
 import {createFilmCardTemplate} from './view/film-card.js';
-// import createFilmsCount  from './view/films-count.js';
+import {createFilmsCount}  from './view/films-count.js';
 // import createFilmDetails from './view/film-details.js';
 // const body = document.body;
 const header = document.querySelector('.header');
@@ -78,9 +78,9 @@ const createLoaderFunction = (array) => {
 
 createLoaderFunction(filmData);
 
-// //Статистика в футере
-// const filmsCountContainer = document.querySelector('.footer__statistics');
-// renderElement(filmsCountContainer, new FilmsCountView().element, RenderPosition.BEFOREEND);
+//Статистика в футере
+const filmsCountContainer = document.querySelector('.footer__statistics');
+renderElement(filmsCountContainer, createFilmsCount(), RenderPosition.BEFOREEND);
 
 // const filmDetails = new FilmDetailsPopupView();
 // const overlay = new PopupOverlayView();
