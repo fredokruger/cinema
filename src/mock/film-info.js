@@ -138,10 +138,13 @@ const getRandomGenresList = () => Array.from({length: chooseRandomNumber(MIN_LEN
 
 const getRandomCommentsListForRandomFilm = () => Array.from({ length: chooseRandomNumber(MIN_LENGTH_COMMENTS_LIST, MAX_LENGTH_COMMENTS_LIST)}, () => comments[chooseRandomNumber(0, comments.length - 1)]);
 
-const getRandomReleaseDate = (dates) => {
+const getRandomReleaseDate = (dates, isFull) => {
   const date = dates[chooseRandomNumber(0, dates.length - 1)];
   const formattedDate = new Date(date);
-  return `${formattedDate.getDate()} ${formattedDate.toLocaleString('en-EN', { month: 'long' })} ${formattedDate.getFullYear()}`;
+  if (isFull) {
+    return `${formattedDate.getDate()} ${formattedDate.toLocaleString('en-EN', { month: 'long' })} ${formattedDate.getFullYear()}`;
+  }
+  return `${formattedDate.getFullYear()}`;
 };
 
 const createFilmsData = () => Array.from({length: chooseRandomNumber(MIN_LENGTH_DATA_FILMS, MAX_LENGTH_DATA_FILMS)}, (_, index) => ( {
@@ -153,8 +156,8 @@ const createFilmsData = () => Array.from({length: chooseRandomNumber(MIN_LENGTH_
   director: director[chooseRandomNumber(0, director.length - 1)],
   screenwritters: getRandomScreenWrittersList(),
   actors: getRandomActorsList(),
-  releaseYear: chooseRandomNumber(1920, 1980),
-  releaseFullFormat: getRandomReleaseDate(releaseDates),
+  releaseYear: getRandomReleaseDate(releaseDates, false),
+  releaseFullFormat: getRandomReleaseDate(releaseDates, true),
   duration: duration[chooseRandomNumber(0, duration.length - 1)],
   country: country[chooseRandomNumber(0, country.length - 1)],
   genre: getRandomGenresList(),
