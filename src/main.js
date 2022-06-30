@@ -1,5 +1,8 @@
+import { filmData } from './mock/film-info.js';
+import {createCommentsData} from './mock/comments-info.js';
 import {RenderPosition, renderElement} from './render.js';
-// import createPopupOverlay from './view/overlay-popup.js';
+import {createPopupOverlay} from './view/overlay-popup.js';
+import {getScrollbarWidth} from './scrollbar-width.js';
 import {createHeaderProfileTemplate} from './view/header-profile.js';
 import {createMainNavigation} from './view/main-navigation.js';
 import {createSortingListTemplate} from './view/sorting-list.js';
@@ -10,10 +13,11 @@ import {createExtraTopRated} from './view/extra-top-rated-list.js';
 import {createExtraMostCommentedList} from './view/extra-most-commented-list.js';
 import {createCardsContainer} from './view/cards-container.js';
 import {createFilmCardTemplate} from './view/film-card.js';
-// import createFilmsCount  from './view/films-count.js';
-// import createFilmDetails from './view/film-details.js';
+import {createFilmsCount}  from './view/films-count.js';
+import {createFilmDetails} from './view/film-details.js';
+import {createFilmComments} from './view/comments.js';
 
-// const body = document.body;
+const body = document.body;
 const header = document.querySelector('.header');
 //Шапка хэдера с профилем
 renderElement(header, createHeaderProfileTemplate(), RenderPosition.BEFOREEND);
@@ -33,10 +37,10 @@ const filmsContainer = document.querySelector('.films');
 const filmsListContainerComponent = createFilmsList();
 renderElement(filmsContainer, filmsListContainerComponent, RenderPosition.BEFOREEND);
 const filmsListContainer = document.querySelector('.films-list');
-// //Секция с топрэйтед фильмами
+//Секция с топрэйтед фильмами
 const topRatedFilmsListContainerComponent = createExtraTopRated();
 renderElement(filmsContainer, topRatedFilmsListContainerComponent, RenderPosition.BEFOREEND);
-// // //Секция с мосткомментед фильмами
+//Секция с мосткомментед фильмами
 const mostCommentedFilmsListContainerComponent = createExtraMostCommentedList();
 renderElement(filmsContainer, mostCommentedFilmsListContainerComponent, RenderPosition.BEFOREEND);
 
@@ -44,14 +48,7 @@ renderElement(filmsContainer, mostCommentedFilmsListContainerComponent, RenderPo
 const cardsContainerComponent = createCardsContainer();
 renderElement(filmsListContainer, cardsContainerComponent, RenderPosition.BEFOREEND);
 const cardsContainer = document.querySelector('.films-list__container');
-//5 карточек
-const filmCardComponent = createFilmCardTemplate();
-for (let i=0; i<5; i++) {
-  renderElement(cardsContainer, filmCardComponent, RenderPosition.BEFOREEND);
-}
-//Кнопка показать больше
-const showMoreButton = createShowMoreButton();
-renderElement(filmsListContainer, showMoreButton, RenderPosition.BEFOREEND);
+
 // Контейнер с топрэйтед карточками
 // const topRatedCardsContainerComponent = new CardsListContainerView();
 // renderElement(topRatedFilmsListContainerComponent.element, topRatedCardsContainerComponent.element, RenderPosition.BEFOREEND);
@@ -59,64 +56,78 @@ renderElement(filmsListContainer, showMoreButton, RenderPosition.BEFOREEND);
 // const mostCommentedCardsContainerComponent = new CardsListContainerView();
 // renderElement(mostCommentedFilmsListContainerComponent.element, mostCommentedCardsContainerComponent.element, RenderPosition.BEFOREEND);
 
+//Кнопка показать больше
+const showMoreButtonComponent = createShowMoreButton();
+renderElement(filmsListContainer, showMoreButtonComponent, RenderPosition.BEFOREEND);
+const showMoreButton = document.querySelector('.films-list__show-more');
 
-// //функция отрисовки следующих пяти фильмов
-// const createLoaderFunction = (array) => {
-//   let currentFilmsCount = ITEMS_COUNT;
-//   const onLoaderFilmsClick = () => {
-//     const nextSliceFilms = array.slice(currentFilmsCount, currentFilmsCount + ITEMS_COUNT);
-//     nextSliceFilms.forEach((item) => renderElement(cardsContainerComponent.element, new FilmCardView(item).element, RenderPosition.BEFOREEND));
-//     currentFilmsCount += ITEMS_COUNT;
-//     if (currentFilmsCount >= array.length) {
-//       showMoreButton.removeElement();
-//     }
-//   };
-//   showMoreButton.element.addEventListener('click', onLoaderFilmsClick);
-// };
+//5 карточек фильмов
+const ITEMS_COUNT = 5;
+const sliceFilms = filmData.slice(0, ITEMS_COUNT);
+sliceFilms.forEach((item) => renderElement(cardsContainer, createFilmCardTemplate(item), RenderPosition.BEFOREEND));
 
-// createLoaderFunction(filmData);
+//функция отрисовки следующих пяти фильмов
+const createLoaderFunction = (array) => {
+  let currentFilmsCount = ITEMS_COUNT;
+  const onLoaderFilmsClick = () => {
+    const nextSliceFilms = array.slice(currentFilmsCount, currentFilmsCount + ITEMS_COUNT);
+    nextSliceFilms.forEach((item) => renderElement(cardsContainer, createFilmCardTemplate(item), RenderPosition.BEFOREEND));
+    currentFilmsCount += ITEMS_COUNT;
+    if (currentFilmsCount >= array.length) {
+      showMoreButton.remove();
+    }
+  };
+  showMoreButton.addEventListener('click', onLoaderFilmsClick);
+};
 
-// //Статистика в футере
-// const filmsCountContainer = document.querySelector('.footer__statistics');
-// renderElement(filmsCountContainer, new FilmsCountView().element, RenderPosition.BEFOREEND);
+createLoaderFunction(filmData);
 
-// const filmDetails = new FilmDetailsPopupView();
-// const overlay = new PopupOverlayView();
-// //Функция закрытия попапа с подробным описанием фильма
-// const closeFilmPopup = () => {
-//   body.classList.remove('hide-overflow');
-//   body.style.marginRight = '';
-//   filmDetails.removeElement();
-//   overlay.removeElement();
-//   document.removeEventListener('keydown', onPopupKeydown);
-// };
+//Статистика в футере
+const filmsCountContainer = document.querySelector('.footer__statistics');
+renderElement(filmsCountContainer, createFilmsCount(), RenderPosition.BEFOREEND);
 
-// //Функция закрытия попапа с подробным описанием фильма на клавишу
-// function onPopupKeydown (evt) {
-//   if (evt.key !== 'Escape') {
-//     return;
-//   }
-//   evt.preventDefault();
-//   closeFilmPopup();
-// }
 
-// //Функция открытия попапа с подробным описанием фильма
-// const openFilmPopup = (evt) => {
-//   if (evt.target.closest('.film-card') && !evt.target.matches('.film-card__controls-item')) {
-//     const currentFilmId = evt.target.closest('.film-card').getAttribute('id');
-//     //установить через сеттер текущий фильм
-//     filmDetails.film = filmData[currentFilmId];
-//     renderElement(body, filmDetails.element, RenderPosition.BEFOREEND);
-//     renderElement(body, overlay.element, RenderPosition.BEFOREEND);
-//     body.classList.add('hide-overflow');
-//     body.style.marginRight = `${getScrollbarWidth()}px`;
-//     const currentCloseButton = filmDetails.element.querySelector('.film-details__close-btn');
-//     currentCloseButton.addEventListener('click', closeFilmPopup);
-//     overlay.element.addEventListener('click', closeFilmPopup);
-//     document.addEventListener('keydown', onPopupKeydown);
-//   }
-// };
-// filmsContainerComponent.element.addEventListener('click', openFilmPopup);
+let filmDetails;
+let overlay;
+//Функция закрытия попапа с подробным описанием фильма
+const closeFilmPopup = () => {
+  body.classList.remove('hide-overflow');
+  body.style.marginRight = '';
+  filmDetails.remove();
+  overlay.remove();
+  document.removeEventListener('keydown', onPopupKeydown);
+};
+
+//Функция закрытия попапа с подробным описанием фильма на клавишу
+function onPopupKeydown (evt) {
+  if (evt.key !== 'Escape') {
+    return;
+  }
+  evt.preventDefault();
+  closeFilmPopup();
+}
+
+//Функция открытия попапа с подробным описанием фильма
+const openFilmPopup = (evt) => {
+  if (evt.target.closest('.film-card') && !evt.target.matches('.film-card__controls-item')) {
+    const currentFilmId = evt.target.closest('.film-card').getAttribute('id');
+    //установить через сеттер текущий фильм
+    renderElement(body, createFilmDetails(filmData[currentFilmId]), RenderPosition.BEFOREEND);
+    renderElement(body, createPopupOverlay(), RenderPosition.BEFOREEND);
+    filmDetails = document.querySelector('.film-details');
+    const filmCommentsContainer = document.querySelector('.film-details__bottom-container');
+    renderElement(filmCommentsContainer, createFilmComments(createCommentsData()), RenderPosition.BEFOREEND);
+    overlay = document.querySelector('.overlay');
+    body.classList.add('hide-overflow');
+    body.style.marginRight = `${getScrollbarWidth()}px`;
+    const currentCloseButton = filmDetails.querySelector('.film-details__close-btn');
+    currentCloseButton.addEventListener('click', closeFilmPopup);
+    overlay.addEventListener('click', closeFilmPopup);
+    document.addEventListener('keydown', onPopupKeydown);
+  }
+};
+
+filmsContainer.addEventListener('click', openFilmPopup);
 
 // const filterButtons = mainNavigationComponent.element.querySelectorAll('.main-navigation__item');
 // const allFilmsButton = mainNavigationComponent.element.querySelector('[href="#all"]');
