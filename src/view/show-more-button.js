@@ -5,7 +5,7 @@ const createShowMoreButtonTemplate = () =>`
 `;
 
 export default class ShowMoreButtonView {
-  #element;
+  #element ;
 
   get template() {
     return createShowMoreButtonTemplate();

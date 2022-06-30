@@ -2,7 +2,7 @@ import {getConvertedString, MAX_LENGTH_DESCRIPTION_STRING_TO_FILM_CARD} from '..
 import { createElement } from '../render.js';
 
 const createFilmCardTemplate = (film) => {
-  const {id, name, rating, releaseYear, duration, genre, img, description, comments, isWatchlist, isWatched, isFavorite} = film;
+  const {id, name, rating, releaseYear, duration, genres, img, description, comments, isWatchlist, isWatched, isFavorite} = film;
   const wathcListClassName = isWatchlist ? 'film-card__controls-item--active' : '';
   const watchedClassName = isWatched ? 'film-card__controls-item--active' : '';
   const favoriteClassName = isFavorite ? 'film-card__controls-item--active' : '';
@@ -16,7 +16,7 @@ const createFilmCardTemplate = (film) => {
     <p class="film-card__info">
       <span class="film-card__year">${releaseYear}</span>
       <span class="film-card__duration">${duration}</span>
-      <span class="film-card__genre">${genre[0]}</span>
+      <span class="film-card__genre">${genres[0]}</span>
     </p>
     <img src="${img}" alt="" class="film-card__poster">
     <p class="film-card__description">${convertedDescription}</p>

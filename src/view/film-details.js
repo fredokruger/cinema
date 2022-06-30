@@ -22,7 +22,6 @@ const createFilmDetailsTemplate = (film) => {
   const watchedButtonContent = isWatched ? 'Already watched' : 'Add to watched';
   const favoriteButtonContent = isFavorite ? 'Already in favorites' : 'Add to favorites';
   return (`
-
   <section class="film-details">
     <form class="film-details__inner" action="" method="get">
       <div class="film-details__top-container">
@@ -103,6 +102,7 @@ const createFilmDetailsTemplate = (film) => {
 export default class FilmDetailsView {
   #element;
   #film;
+
   constructor (film) {
     this.#film = film;
   }
