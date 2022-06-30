@@ -1,6 +1,6 @@
 import { filmData } from './mock/film-info.js';
 import {createCommentsData} from './mock/comments-info.js';
-import {RenderPosition, renderElement} from './render.js';
+import {RenderPosition, render} from './render.js';
 import {createPopupOverlay} from './view/overlay-popup.js';
 import {getScrollbarWidth} from './scrollbar-width.js';
 import {createHeaderProfileTemplate} from './view/header-profile.js';
@@ -20,33 +20,33 @@ import {createFilmComments} from './view/comments.js';
 const body = document.body;
 const header = document.querySelector('.header');
 //Шапка хэдера с профилем
-renderElement(header, createHeaderProfileTemplate(), RenderPosition.BEFOREEND);
+render(header, createHeaderProfileTemplate(), RenderPosition.BEFOREEND);
 
 const main = document.querySelector('.main');
 //Основная навигация
-renderElement(main, createMainNavigation(), RenderPosition.BEFOREEND);
+render(main, createMainNavigation(), RenderPosition.BEFOREEND);
 
 //Сортировка фильмов
-renderElement(main, createSortingListTemplate(), RenderPosition.BEFOREEND);
+render(main, createSortingListTemplate(), RenderPosition.BEFOREEND);
 
 //Общий контейнер фильмов
 const filmsContainerComponent = createFilmsContainerTemplate();
-renderElement(main, filmsContainerComponent, RenderPosition.BEFOREEND);
+render(main, filmsContainerComponent, RenderPosition.BEFOREEND);
 const filmsContainer = document.querySelector('.films');
 //Секция с фильмами по 5 штук
 const filmsListContainerComponent = createFilmsList();
-renderElement(filmsContainer, filmsListContainerComponent, RenderPosition.BEFOREEND);
+render(filmsContainer, filmsListContainerComponent, RenderPosition.BEFOREEND);
 const filmsListContainer = document.querySelector('.films-list');
 //Секция с топрэйтед фильмами
 const topRatedFilmsListContainerComponent = createExtraTopRated();
-renderElement(filmsContainer, topRatedFilmsListContainerComponent, RenderPosition.BEFOREEND);
+render(filmsContainer, topRatedFilmsListContainerComponent, RenderPosition.BEFOREEND);
 //Секция с мосткомментед фильмами
 const mostCommentedFilmsListContainerComponent = createExtraMostCommentedList();
-renderElement(filmsContainer, mostCommentedFilmsListContainerComponent, RenderPosition.BEFOREEND);
+render(filmsContainer, mostCommentedFilmsListContainerComponent, RenderPosition.BEFOREEND);
 
 //Контейнер с карточками фильмов по 5
 const cardsContainerComponent = createCardsContainer();
-renderElement(filmsListContainer, cardsContainerComponent, RenderPosition.BEFOREEND);
+render(filmsListContainer, cardsContainerComponent, RenderPosition.BEFOREEND);
 const cardsContainer = document.querySelector('.films-list__container');
 
 // Контейнер с топрэйтед карточками
@@ -58,20 +58,20 @@ const cardsContainer = document.querySelector('.films-list__container');
 
 //Кнопка показать больше
 const showMoreButtonComponent = createShowMoreButton();
-renderElement(filmsListContainer, showMoreButtonComponent, RenderPosition.BEFOREEND);
+render(filmsListContainer, showMoreButtonComponent, RenderPosition.BEFOREEND);
 const showMoreButton = document.querySelector('.films-list__show-more');
 
 //5 карточек фильмов
 const ITEMS_COUNT = 5;
 const sliceFilms = filmData.slice(0, ITEMS_COUNT);
-sliceFilms.forEach((item) => renderElement(cardsContainer, createFilmCardTemplate(item), RenderPosition.BEFOREEND));
+sliceFilms.forEach((item) => render(cardsContainer, createFilmCardTemplate(item), RenderPosition.BEFOREEND));
 
 //функция отрисовки следующих пяти фильмов
 const createLoaderFunction = (array) => {
   let currentFilmsCount = ITEMS_COUNT;
   const onLoaderFilmsClick = () => {
     const nextSliceFilms = array.slice(currentFilmsCount, currentFilmsCount + ITEMS_COUNT);
-    nextSliceFilms.forEach((item) => renderElement(cardsContainer, createFilmCardTemplate(item), RenderPosition.BEFOREEND));
+    nextSliceFilms.forEach((item) => render(cardsContainer, createFilmCardTemplate(item), RenderPosition.BEFOREEND));
     currentFilmsCount += ITEMS_COUNT;
     if (currentFilmsCount >= array.length) {
       showMoreButton.remove();
@@ -84,7 +84,7 @@ createLoaderFunction(filmData);
 
 //Статистика в футере
 const filmsCountContainer = document.querySelector('.footer__statistics');
-renderElement(filmsCountContainer, createFilmsCount(), RenderPosition.BEFOREEND);
+render(filmsCountContainer, createFilmsCount(), RenderPosition.BEFOREEND);
 
 
 let filmDetails;
@@ -112,11 +112,11 @@ const openFilmPopup = (evt) => {
   if (evt.target.closest('.film-card') && !evt.target.matches('.film-card__controls-item')) {
     const currentFilmId = evt.target.closest('.film-card').getAttribute('id');
     //установить через сеттер текущий фильм
-    renderElement(body, createFilmDetails(filmData[currentFilmId]), RenderPosition.BEFOREEND);
-    renderElement(body, createPopupOverlay(), RenderPosition.BEFOREEND);
+    render(body, createFilmDetails(filmData[currentFilmId]), RenderPosition.BEFOREEND);
+    render(body, createPopupOverlay(), RenderPosition.BEFOREEND);
     filmDetails = document.querySelector('.film-details');
     const filmCommentsContainer = document.querySelector('.film-details__bottom-container');
-    renderElement(filmCommentsContainer, createFilmComments(createCommentsData()), RenderPosition.BEFOREEND);
+    render(filmCommentsContainer, createFilmComments(createCommentsData()), RenderPosition.BEFOREEND);
     overlay = document.querySelector('.overlay');
     body.classList.add('hide-overflow');
     body.style.marginRight = `${getScrollbarWidth()}px`;
