@@ -160,7 +160,7 @@ const createFilmsData = () => Array.from({length: chooseRandomNumber(MIN_LENGTH_
   releaseFullFormat: getRandomReleaseDate(releaseDates, true),
   duration: duration[chooseRandomNumber(0, duration.length - 1)],
   country: country[chooseRandomNumber(0, country.length - 1)],
-  genre: getRandomGenresList(),
+  genres: getRandomGenresList(),
   description: getRandomDescriptionsList(),
   ageRating: ageRating[chooseRandomNumber(0, ageRating.length - 1)],
   comments: getRandomCommentsListForRandomFilm(),
