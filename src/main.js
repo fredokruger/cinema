@@ -1,6 +1,8 @@
 import { filmData } from './mock/film-info.js';
+import {createCommentsData} from './mock/comments-info.js';
 import {RenderPosition, renderElement} from './render.js';
-// import createPopupOverlay from './view/overlay-popup.js';
+import {createPopupOverlay} from './view/overlay-popup.js';
+import {getScrollbarWidth} from './scrollbar-width.js';
 import {createHeaderProfileTemplate} from './view/header-profile.js';
 import {createMainNavigation} from './view/main-navigation.js';
 import {createSortingListTemplate} from './view/sorting-list.js';
@@ -12,8 +14,10 @@ import {createExtraMostCommentedList} from './view/extra-most-commented-list.js'
 import {createCardsContainer} from './view/cards-container.js';
 import {createFilmCardTemplate} from './view/film-card.js';
 import {createFilmsCount}  from './view/films-count.js';
-// import {createFilmDetails} from './view/film-details.js';
-// const body = document.body;
+import {createFilmDetails} from './view/film-details.js';
+import {createFilmComments} from './view/comments.js';
+
+const body = document.body;
 const header = document.querySelector('.header');
 //Шапка хэдера с профилем
 renderElement(header, createHeaderProfileTemplate(), RenderPosition.BEFOREEND);
@@ -82,43 +86,48 @@ createLoaderFunction(filmData);
 const filmsCountContainer = document.querySelector('.footer__statistics');
 renderElement(filmsCountContainer, createFilmsCount(), RenderPosition.BEFOREEND);
 
-// const filmDetails = new FilmDetailsPopupView();
-// const overlay = new PopupOverlayView();
-// //Функция закрытия попапа с подробным описанием фильма
-// const closeFilmPopup = () => {
-//   body.classList.remove('hide-overflow');
-//   body.style.marginRight = '';
-//   filmDetails.removeElement();
-//   overlay.removeElement();
-//   document.removeEventListener('keydown', onPopupKeydown);
-// };
 
-// //Функция закрытия попапа с подробным описанием фильма на клавишу
-// function onPopupKeydown (evt) {
-//   if (evt.key !== 'Escape') {
-//     return;
-//   }
-//   evt.preventDefault();
-//   closeFilmPopup();
-// }
+let filmDetails;
+let overlay;
+//Функция закрытия попапа с подробным описанием фильма
+const closeFilmPopup = () => {
+  body.classList.remove('hide-overflow');
+  body.style.marginRight = '';
+  filmDetails.remove();
+  overlay.remove();
+  document.removeEventListener('keydown', onPopupKeydown);
+};
 
-// //Функция открытия попапа с подробным описанием фильма
-// const openFilmPopup = (evt) => {
-//   if (evt.target.closest('.film-card') && !evt.target.matches('.film-card__controls-item')) {
-//     const currentFilmId = evt.target.closest('.film-card').getAttribute('id');
-//     //установить через сеттер текущий фильм
-//     filmDetails.film = filmData[currentFilmId];
-//     renderElement(body, filmDetails.element, RenderPosition.BEFOREEND);
-//     renderElement(body, overlay.element, RenderPosition.BEFOREEND);
-//     body.classList.add('hide-overflow');
-//     body.style.marginRight = `${getScrollbarWidth()}px`;
-//     const currentCloseButton = filmDetails.element.querySelector('.film-details__close-btn');
-//     currentCloseButton.addEventListener('click', closeFilmPopup);
-//     overlay.element.addEventListener('click', closeFilmPopup);
-//     document.addEventListener('keydown', onPopupKeydown);
-//   }
-// };
-// filmsContainerComponent.element.addEventListener('click', openFilmPopup);
+//Функция закрытия попапа с подробным описанием фильма на клавишу
+function onPopupKeydown (evt) {
+  if (evt.key !== 'Escape') {
+    return;
+  }
+  evt.preventDefault();
+  closeFilmPopup();
+}
+
+//Функция открытия попапа с подробным описанием фильма
+const openFilmPopup = (evt) => {
+  if (evt.target.closest('.film-card') && !evt.target.matches('.film-card__controls-item')) {
+    const currentFilmId = evt.target.closest('.film-card').getAttribute('id');
+    //установить через сеттер текущий фильм
+    renderElement(body, createFilmDetails(filmData[currentFilmId]), RenderPosition.BEFOREEND);
+    renderElement(body, createPopupOverlay(), RenderPosition.BEFOREEND);
+    filmDetails = document.querySelector('.film-details');
+    const filmCommentsContainer = document.querySelector('.film-details__bottom-container');
+    renderElement(filmCommentsContainer, createFilmComments(createCommentsData()), RenderPosition.BEFOREEND);
+    overlay = document.querySelector('.overlay');
+    body.classList.add('hide-overflow');
+    body.style.marginRight = `${getScrollbarWidth()}px`;
+    const currentCloseButton = filmDetails.querySelector('.film-details__close-btn');
+    currentCloseButton.addEventListener('click', closeFilmPopup);
+    overlay.addEventListener('click', closeFilmPopup);
+    document.addEventListener('keydown', onPopupKeydown);
+  }
+};
+
+filmsContainer.addEventListener('click', openFilmPopup);
 
 // const filterButtons = mainNavigationComponent.element.querySelectorAll('.main-navigation__item');
 // const allFilmsButton = mainNavigationComponent.element.querySelector('[href="#all"]');
