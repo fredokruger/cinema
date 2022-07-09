@@ -1,7 +1,5 @@
 import {chooseRandomNumber} from '../util.js';
-
-const MIN_LENGTH_COMMENTS_LIST = 0;
-const MAX_LENGTH_COMMENTS_LIST = 5;
+import {createCommentsData} from './comments-info.js';
 
 const MIN_LENGTH_DATA_FILMS = 15;
 const MAX_LENGTH_DATA_FILMS = 20;
@@ -56,15 +54,6 @@ const duration = [
   '1h 55m',
   '1h 18m',
   '1h 59m'
-];
-
-const comments = [
-  'Фильм пушка!',
-  'Неплохой фильм, на один раз с пивком потянет=)',
-  'Игра актёров средняя, они всё и испортили.',
-  'Спецэффекты очень плохие=(',
-  'Не советую смотреть этот фильм, потеря времени.',
-  'ОЧЕНЬ ПЛОХОЙ ФИЛЬМ!!!'
 ];
 
 const originalNameFilms = [
@@ -136,8 +125,6 @@ const getRandomActorsList = () => Array.from({length: chooseRandomNumber(MIN_LEN
 
 const getRandomGenresList = () => Array.from({length: chooseRandomNumber(MIN_LENGTH_STRING_GENRES, MAX_LENGTH_STRING_GENRES)}, () => genre[chooseRandomNumber(0, genre.length - 1)]);
 
-const getRandomCommentsListForRandomFilm = () => Array.from({ length: chooseRandomNumber(MIN_LENGTH_COMMENTS_LIST, MAX_LENGTH_COMMENTS_LIST)}, () => comments[chooseRandomNumber(0, comments.length - 1)]);
-
 const getRandomReleaseDate = (dates, isFull) => {
   const date = dates[chooseRandomNumber(0, dates.length - 1)];
   const formattedDate = new Date(date);
@@ -163,7 +150,7 @@ const createFilmsData = () => Array.from({length: chooseRandomNumber(MIN_LENGTH_
   genres: getRandomGenresList(),
   description: getRandomDescriptionsList(),
   ageRating: ageRating[chooseRandomNumber(0, ageRating.length - 1)],
-  comments: getRandomCommentsListForRandomFilm(),
+  comments: createCommentsData(),
   isWatchlist: Boolean(chooseRandomNumber(0,1)),
   isWatched: Boolean(chooseRandomNumber(0,1)),
   isFavorite: Boolean(chooseRandomNumber(0,1)),
