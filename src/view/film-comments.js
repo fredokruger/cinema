@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from './abstract-view.js';
 
 //Отрисовка комментариев, исходя из их количества
 const createCommentsList = (comments) => {
@@ -72,25 +72,14 @@ const createFilmCommentsTemplate = (comments) => {
 `);
 };
 
-export default class FilmCommentsView {
-  #element;
+export default class FilmCommentsView extends AbstractView {
   #comments;
   constructor (comments) {
+    super();
     this.#comments = comments;
   }
 
   get template() {
     return createFilmCommentsTemplate(this.#comments);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

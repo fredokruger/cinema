@@ -1,24 +1,11 @@
-import { createElement } from '../render.js';
+import AbstractView from './abstract-view.js';
 
 const createPopupOverlayTemplate = () =>`
 <div class="overlay"></div>
 `;
 
-export default class PopupOverlayView {
-  #element;
-
+export default class PopupOverlayView extends AbstractView {
   get template() {
     return createPopupOverlayTemplate();
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }

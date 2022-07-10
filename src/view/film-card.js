@@ -1,5 +1,5 @@
 import {getConvertedString, MAX_LENGTH_DESCRIPTION_STRING_TO_FILM_CARD} from '../util.js';
-import { createElement } from '../render.js';
+import AbstractView from './abstract-view.js';
 
 const createFilmCardTemplate = (film) => {
   const {id, name, rating, releaseYear, duration, genres, img, description, comments, isWatchlist, isWatched, isFavorite} = film;
@@ -31,25 +31,14 @@ const createFilmCardTemplate = (film) => {
 `);
 };
 
-export default class FilmCardView {
-  #element;
+export default class FilmCardView extends AbstractView {
   #film;
   constructor (film) {
+    super();
     this.#film = film;
   }
 
   get template() {
     return createFilmCardTemplate(this.#film);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
