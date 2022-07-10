@@ -1,4 +1,4 @@
-import { createElement } from '../render.js';
+import AbstractView from './abstract-view.js';
 
 //Отрисовка жанров, исходя из их количества
 const createGenresListTemplate = (genres) => {
@@ -99,26 +99,15 @@ const createFilmDetailsTemplate = (film) => {
   `);
 };
 
-export default class FilmDetailsView {
-  #element;
+export default class FilmDetailsView extends AbstractView {
   #film;
 
   constructor (film) {
+    super();
     this.#film = film;
   }
 
   get template() {
     return createFilmDetailsTemplate(this.#film);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
